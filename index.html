@@ -24,25 +24,15 @@ z-index:1000;
 }
 
 nav h3{font-weight:800;}
-
 nav ul{list-style:none;display:flex;gap:30px;}
-
-nav ul li{
-cursor:pointer;
-font-weight:600;
-transition:0.3s;
-}
-
+nav ul li{cursor:pointer;font-weight:600;transition:0.3s;}
 nav ul li:hover{color:#e10600;}
 
-/* PAGE */
 .page{display:none;padding-top:100px;}
 
-/* LAYOUT */
 .container{display:flex;padding:40px 60px;gap:40px;}
 #main{flex:1;}
 
-/* HERO */
 .hero{
 background:#2e4057;
 padding:60px;
@@ -50,12 +40,10 @@ border-radius:25px;
 color:white;
 margin-bottom:35px;
 }
-
 .hero h1{font-size:2.8rem;font-weight:800;}
 .hero span{color:#e10600;}
 .hero p{margin-top:10px;opacity:0.9;}
 
-/* INPUTS */
 #searchInput,#categoryFilter,form input,form textarea{
 width:100%;
 padding:14px;
@@ -66,7 +54,6 @@ background:white;
 font-family:'Montserrat';
 }
 
-/* BUSINESS CARD */
 .business{
 background:white;
 padding:25px;
@@ -75,8 +62,8 @@ border-radius:18px;
 box-shadow:0 10px 25px rgba(0,0,0,0.05);
 transition:0.3s;
 border-left:6px solid #e10600;
+cursor:pointer;
 }
-
 .business:hover{
 transform:translateY(-5px);
 box-shadow:0 15px 35px rgba(0,0,0,0.1);
@@ -109,7 +96,6 @@ top:120px;
 
 #sidebar h2 span{color:#e10600;}
 #sidebar p{margin:20px 0 30px 0;color:#cbd5e1;}
-
 #sidebar a{
 display:block;
 text-align:center;
@@ -139,6 +125,10 @@ border-radius:25px;
 box-shadow:0 8px 20px rgba(0,0,0,0.05);
 max-width:600px;
 margin:auto;
+}
+
+.category-results{
+margin-top:20px;
 }
 
 .success-message{
@@ -181,6 +171,7 @@ display:none;
 </div>
 
 <input type="text" id="searchInput" placeholder="Search businesses..." onkeyup="filterBusinesses()">
+
 <select id="categoryFilter" onchange="filterBusinesses()">
 <option value="">All Categories</option>
 <option value="Dipped Treats">Dipped Treats</option>
@@ -202,18 +193,45 @@ display:none;
 </div>
 </div>
 
+<!-- CATEGORIES -->
+<div id="categories" class="page">
+<div class="section-box">
+<h2>Browse by Category</h2>
+<br>
+
+<div class="business" onclick="showCategoryBusinesses('Dipped Treats', this)">
+<h3>Dipped Treats</h3>
+<p>Chocolate strawberries, cake pops, and more.</p>
+<div class="category-results"></div>
+</div>
+
+<div class="business" onclick="showCategoryBusinesses('Cookies', this)">
+<h3>Cookies</h3>
+<p>Fresh baked cookie businesses.</p>
+<div class="category-results"></div>
+</div>
+
+<div class="business" onclick="showCategoryBusinesses('Flower Shop', this)">
+<h3>Flower Shop</h3>
+<p>Local floral businesses.</p>
+<div class="category-results"></div>
+</div>
+
+<div class="business" onclick="showCategoryBusinesses('Sweets', this)">
+<h3>Sweets</h3>
+<p>All sweet treat businesses.</p>
+<div class="category-results"></div>
+</div>
+
+</div>
+</div>
+
 <!-- ADD BUSINESS -->
 <div id="add" class="page">
 <div class="section-box">
 <h2>List Your Business</h2>
 <br>
-
-<div class="success-message" id="successMsg">
-Submission successful! Please check your email to confirm.
-</div>
-
 <form action="https://formsubmit.co/faze.swish12@gmail.com" method="POST">
-
 <input type="hidden" name="_subject" value="New Business Submission">
 <input type="hidden" name="_captcha" value="false">
 <input type="hidden" name="_template" value="table">
@@ -225,7 +243,6 @@ Submission successful! Please check your email to confirm.
 
 <button type="submit" class="instagram-btn">Submit Business</button>
 </form>
-
 </div>
 </div>
 
@@ -248,11 +265,13 @@ Submission successful! Please check your email to confirm.
 </div>
 
 <script>
+
 function showPage(page){
 document.querySelectorAll(".page").forEach(p=>p.style.display="none");
 document.getElementById(page).style.display="block";
 window.scrollTo(0,0);
 }
+
 showPage("home");
 
 const businesses=[
@@ -260,8 +279,8 @@ const businesses=[
 {name:"Jerrys Dipped Treats",category:"Dipped Treats",description:"Creative and delicious dipped treats made locally in Chicago.",instagram:"https://instagram.com/jerrys_dippedtreats"},
 {name:"Monkey Bakes",category:"Cookies",description:"Home-based baking business creating fresh and delicious cookies.",instagram:"https://instagram.com/monkeybakess"},
 {name:"Natalie's Flowershop",category:"Flower Shop",description:"Located in the Chicago Midway area. Se habla español.",instagram:"https://instagram.com/natalies_flowershop"},
-{name:"Sweetsbyxnata",category:"Sweets",description:"Chicago Midway Area. Chocolate treats and more. Takes Zelle, Apple Pay, and CashApp.",instagram:"https://instagram.com/sweetsbyxnata"},
-{name:"BuzosBakes",category:"Sweets",description:"Homemade baked goods crafted from scratch using quality ingredients.",instagram:"https://instagram.com/buzosbakes"}
+{name:"Sweetsbyxnata",category:"Sweets",description:"Chicago Midway Area. Chocolate treats and more.",instagram:"https://instagram.com/sweetsbyxnata"},
+{name:"BuzosBakes",category:"Sweets",description:"Homemade baked goods crafted from scratch.",instagram:"https://instagram.com/buzosbakes"}
 ];
 
 function displayBusinesses(list){
@@ -288,7 +307,28 @@ b.name.toLowerCase().includes(search)&&
 displayBusinesses(filtered);
 }
 
+function showCategoryBusinesses(category, element){
+const resultsDiv = element.querySelector(".category-results");
+
+if(resultsDiv.innerHTML !== ""){
+resultsDiv.innerHTML = "";
+return;
+}
+
+const filtered = businesses.filter(b=>b.category===category);
+
+filtered.forEach(b=>{
+resultsDiv.innerHTML += `
+<div class="business" style="margin-top:15px;">
+<h4>${b.name}</h4>
+<p>${b.description}</p>
+<a class="instagram-btn" href="${b.instagram}" target="_blank">View on Instagram</a>
+</div>`;
+});
+}
+
 displayBusinesses(businesses);
+
 </script>
 
 </body>
