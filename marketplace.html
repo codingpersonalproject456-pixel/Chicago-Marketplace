@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Chicago Local Marketplace</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Montserrat',sans-serif;background:#f4f6fb;color:#0b1f3a;}
+
+/* NAVBAR */
+nav{
+position:fixed;
+top:0;
+width:100%;
+background:white;
+padding:18px 60px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+box-shadow:0 4px 20px rgba(0,0,0,0.05);
+z-index:1000;
+}
+
+nav h3{font-weight:800;}
+
+nav ul{list-style:none;display:flex;gap:30px;}
+
+nav ul li{
+cursor:pointer;
+font-weight:600;
+transition:0.3s;
+}
+
+nav ul li:hover{color:#e10600;}
+
+/* PAGE */
+.page{display:none;padding-top:100px;}
+
+/* LAYOUT */
+.container{display:flex;padding:40px 60px;gap:40px;}
+#main{flex:1;}
+
+/* HERO */
+.hero{
+background:#2e4057;
+padding:60px;
+border-radius:25px;
+color:white;
+margin-bottom:35px;
+}
+
+.hero h1{font-size:2.8rem;font-weight:800;}
+.hero span{color:#e10600;}
+.hero p{margin-top:10px;opacity:0.9;}
+
+/* INPUTS */
+#searchInput,#categoryFilter,form input,form textarea{
+width:100%;
+padding:14px;
+margin-bottom:15px;
+border-radius:12px;
+border:1px solid #d1d5db;
+background:white;
+font-family:'Montserrat';
+}
+
+/* BUSINESS CARD */
+.business{
+background:white;
+padding:25px;
+margin-bottom:25px;
+border-radius:18px;
+box-shadow:0 10px 25px rgba(0,0,0,0.05);
+transition:0.3s;
+border-left:6px solid #e10600;
+}
+
+.business:hover{
+transform:translateY(-5px);
+box-shadow:0 15px 35px rgba(0,0,0,0.1);
+}
+
+.instagram-btn{
+display:inline-block;
+margin-top:12px;
+padding:10px 18px;
+background:#e10600;
+color:white;
+text-decoration:none;
+border-radius:8px;
+font-weight:600;
+border:none;
+cursor:pointer;
+}
+
+/* SIDEBAR */
+#sidebar{
+width:360px;
+background:linear-gradient(180deg,#0b1f3a,#142d52);
+color:white;
+padding:60px 40px;
+border-radius:25px;
+height:calc(100vh - 160px);
+position:sticky;
+top:120px;
+}
+
+#sidebar h2 span{color:#e10600;}
+#sidebar p{margin:20px 0 30px 0;color:#cbd5e1;}
+
+#sidebar a{
+display:block;
+text-align:center;
+padding:14px;
+background:#2563eb;
+border-radius:12px;
+color:white;
+text-decoration:none;
+font-weight:700;
+cursor:pointer;
+}
+
+/* SECTION BOX */
+.section-box{
+background:white;
+padding:50px;
+border-radius:25px;
+box-shadow:0 10px 25px rgba(0,0,0,0.05);
+max-width:900px;
+margin:auto;
+}
+
+.contact-box{
+background:white;
+padding:40px;
+border-radius:25px;
+box-shadow:0 8px 20px rgba(0,0,0,0.05);
+max-width:600px;
+margin:auto;
+}
+
+.success-message{
+background:#e6fffa;
+padding:15px;
+border-radius:10px;
+color:#065f46;
+margin-bottom:20px;
+display:none;
+}
+
+@media(max-width:1000px){
+.container{flex-direction:column;}
+#sidebar{position:relative;top:0;height:auto;width:100%;}
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+<h3>Chicago Marketplace</h3>
+<ul>
+<li onclick="showPage('home')">Home</li>
+<li onclick="showPage('categories')">Categories</li>
+<li onclick="showPage('about')">About Us</li>
+<li onclick="showPage('contact')">Contact Us</li>
+<li onclick="showPage('add')">Add Business</li>
+</ul>
+</nav>
+
+<!-- HOME -->
+<div id="home" class="page">
+<div class="container">
+<div id="main">
+
+<div class="hero">
+<h1>Chicago <span>Local</span> Marketplace</h1>
+<p>Discover and support small businesses across the city.</p>
+</div>
+
+<input type="text" id="searchInput" placeholder="Search businesses..." onkeyup="filterBusinesses()">
+<select id="categoryFilter" onchange="filterBusinesses()">
+<option value="">All Categories</option>
+<option value="Dipped Treats">Dipped Treats</option>
+<option value="Cookies">Cookies</option>
+<option value="Flower Shop">Flower Shop</option>
+<option value="Sweets">Sweets</option>
+</select>
+
+<div id="businessList"></div>
+
+</div>
+
+<div id="sidebar">
+<h2>Get <span>Featured</span></h2>
+<p>Chicago entrepreneurs deserve visibility. Join our growing directory and connect directly with your local community.</p>
+<a onclick="showPage('add')">Submit Your Business</a>
+</div>
+
+</div>
+</div>
+
+<!-- ADD BUSINESS -->
+<div id="add" class="page">
+<div class="section-box">
+<h2>List Your Business</h2>
+<br>
+
+<div class="success-message" id="successMsg">
+Submission successful! Please check your email to confirm.
+</div>
+
+<form action="https://formsubmit.co/faze.swish12@gmail.com" method="POST">
+
+<input type="hidden" name="_subject" value="New Business Submission">
+<input type="hidden" name="_captcha" value="false">
+<input type="hidden" name="_template" value="table">
+
+<input type="text" name="Business Name" placeholder="Business Name" required>
+<input type="text" name="Category" placeholder="Category" required>
+<textarea name="Description" placeholder="Business Description" rows="4" required></textarea>
+<input type="text" name="Instagram" placeholder="Instagram Link or Handle" required>
+
+<button type="submit" class="instagram-btn">Submit Business</button>
+</form>
+
+</div>
+</div>
+
+<!-- ABOUT -->
+<div id="about" class="page">
+<div class="section-box">
+<h2>About This Project</h2>
+<br>
+<p>This website was developed as part of my IB Personal Project to support small businesses in Chicago and increase their digital exposure.</p>
+</div>
+</div>
+
+<!-- CONTACT -->
+<div id="contact" class="page">
+<div class="contact-box">
+<h2>Contact Us</h2>
+<br>
+<p>Email: <strong>faze.swish12@gmail.com</strong></p>
+</div>
+</div>
+
+<script>
+function showPage(page){
+document.querySelectorAll(".page").forEach(p=>p.style.display="none");
+document.getElementById(page).style.display="block";
+window.scrollTo(0,0);
+}
+showPage("home");
+
+const businesses=[
+{name:"GJC Sweets",category:"Dipped Treats",description:"Specializing in chocolate-covered strawberries, cupcakes, cake pops, and more.",instagram:"https://instagram.com/gjcvsweets"},
+{name:"Jerrys Dipped Treats",category:"Dipped Treats",description:"Creative and delicious dipped treats made locally in Chicago.",instagram:"https://instagram.com/jerrys_dippedtreats"},
+{name:"Monkey Bakes",category:"Cookies",description:"Home-based baking business creating fresh and delicious cookies.",instagram:"https://instagram.com/monkeybakess"},
+{name:"Natalie's Flowershop",category:"Flower Shop",description:"Located in the Chicago Midway area. Se habla español.",instagram:"https://instagram.com/natalies_flowershop"},
+{name:"Sweetsbyxnata",category:"Sweets",description:"Chicago Midway Area. Chocolate treats and more. Takes Zelle, Apple Pay, and CashApp.",instagram:"https://instagram.com/sweetsbyxnata"},
+{name:"BuzosBakes",category:"Sweets",description:"Homemade baked goods crafted from scratch using quality ingredients.",instagram:"https://instagram.com/buzosbakes"}
+];
+
+function displayBusinesses(list){
+const container=document.getElementById("businessList");
+container.innerHTML="";
+list.forEach(b=>{
+container.innerHTML+=`
+<div class="business">
+<h3>${b.name}</h3>
+<p><strong>Category:</strong> ${b.category}</p>
+<p>${b.description}</p>
+<a class="instagram-btn" href="${b.instagram}" target="_blank">View on Instagram</a>
+</div>`;
+});
+}
+
+function filterBusinesses(){
+const search=document.getElementById("searchInput").value.toLowerCase();
+const category=document.getElementById("categoryFilter").value;
+const filtered=businesses.filter(b=>
+b.name.toLowerCase().includes(search)&&
+(category===""||b.category===category)
+);
+displayBusinesses(filtered);
+}
+
+displayBusinesses(businesses);
+</script>
+
+</body>
+</html>
